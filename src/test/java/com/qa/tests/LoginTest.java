@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import com.qa.pages.LoginPage;
 
@@ -23,7 +24,18 @@ public class LoginTest {
     @BeforeEach
 public void setUp() {
     WebDriverManager.chromedriver().browserVersion("134.0.6998.118").setup(); // <-- ta version actuelle
-    driver = new ChromeDriver();
+
+    ChromeOptions options = new ChromeOptions();
+    
+    // Mode headless seulement si on est dans GitHub Actions
+    if (System.getenv("CI") != null) {
+        options.addArguments("--headless");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--disable-gpu");
+        options.addArguments("--remote-allow-origins=*");
+    }
+    driver = new ChromeDriver(options);
     driver.get("https://the-internet.herokuapp.com/login");
     loginPage = new LoginPage(driver);
 }
