@@ -22,8 +22,12 @@ public class LoginTest {
     private LoginPage loginPage;
 
     @BeforeEach
-public void setUp() {
-    WebDriverManager.chromedriver().browserVersion("134.0.6998.118").setup(); // <-- ta version actuelle
+    public void setUp() {
+        if (System.getenv("CI") != null) {
+            WebDriverManager.chromedriver().setup();
+        } else {
+            WebDriverManager.chromedriver().browserVersion("134.0.6998.118").setup(); // <-- ta version actuelle
+        }
 
     ChromeOptions options = new ChromeOptions();
     
